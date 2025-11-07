@@ -1,0 +1,283 @@
+<div class="space-y-6">
+  <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Historical Data Analysis</h2>
+    <form [formGroup]="dateRangeForm" (ngSubmit)="onSubmit()" class="flex flex-col sm:flex-row items-center gap-4">
+      <div class="w-full sm:w-auto">
+        <label for="startDate" class="text-sm font-medium text-gray-600 dark:text-gray-300">Start Date</label>
+        <input 
+          id="startDate" 
+          type="date" 
+          formControlName="startDate" 
+          class="mt-1 w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500"
+          [class.border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.dark:border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.focus:border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.focus:ring-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty">
+      </div>
+      <div class="w-full sm:w-auto">
+        <label for="endDate" class="text-sm font-medium text-gray-600 dark:text-gray-300">End Date</label>
+        <input 
+          id="endDate" 
+          type="date" 
+          formControlName="endDate" 
+          class="mt-1 w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2 focus:ring-emerald-500 focus:border-emerald-500"
+          [class.border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.dark:border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.focus:border-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty"
+          [class.focus:ring-red-500]="dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty">
+      </div>
+      <div class="w-full sm:w-auto pt-2 sm:pt-6">
+         <button type="submit" [disabled]="isLoading()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+          @if (isLoading()) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8
+ 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Fetching...</span>
+          } @else {
+            <span>Fetch Data</span>
+          }
+        </button>
+      </div>
+    </form>
+    
+    @if ((dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty) || error()) {
+      <div class="mt-4 p-3 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-600 rounded-md flex items-start gap-3 text-sm text-red-700 dark:text-red-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <div>
+              @if(dateRangeForm.hasError('dateRangeInvalid') && dateRangeForm.dirty) {
+                  <p><span class="font-semibold">Invalid Date Range:</span> The selected end date cannot be before the start date.</p>
+              } @else if(error()) {
+                  <p><span class="font-semibold">Data Error:</span> {{ error() }}</p>
+              }
+          </div>
+      </div>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="space-y-8 animate-pulse">
+      <!-- Inflow Skeleton -->
+      <div>
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div> <!-- Section Title -->
+        <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4 mt-8"></div> <!-- Subtitle -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+        </div>
+        <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mt-12 mb-4"></div> <!-- Subtitle -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+        </div>
+      </div>
+      <!-- Effluent Skeleton -->
+      <div class="mt-16">
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-6"></div> <!-- Section Title -->
+        <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4 mt-8"></div> <!-- Subtitle -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+        </div>
+        <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mt-12 mb-4"></div> <!-- Subtitle -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div class="h-80 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (historicalData(); as data) {
+    @if (data.inflow.flow.chartData.length > 0) {
+      <div class="space-y-16">
+        <!-- Inflow Section -->
+        <section>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 pb-2 border-b border-gray-200 dark:border-gray-700">Inflow Historical Data</h3>
+          
+          <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">Parameter Charts</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <app-chart-card chartTitle="Inflow Flow (m³/hr)" [data]="data.inflow.flow.chartData" />
+            <app-chart-card chartTitle="Inflow TDS (ppm)" [data]="data.inflow.tds.chartData" />
+            <app-chart-card chartTitle="Inflow pH" [data]="data.inflow.ph.chartData" />
+          </div>
+
+          <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-12 mb-4">Analysis & Daily Summaries</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Flow Analysis & Summary -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">Flow Analysis</h5>
+              @if (inflowFlowTrend(); as trend) {
+                <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Inflow_Flow_Daily_Summary" [data]="mapTableData(data.inflow.flow.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+
+            <!-- TDS Analysis & Summary -->
+             <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">TDS Analysis</h5>
+              @if (inflowTdsTrend(); as trend) {
+                <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                     <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Inflow_TDS_Daily_Summary" [data]="mapTableData(data.inflow.tds.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+
+            <!-- pH Analysis & Summary -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">pH Analysis</h5>
+              @if (inflowPhTrend(); as trend) {
+                <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Inflow_pH_Daily_Summary" [data]="mapTableData(data.inflow.ph.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Effluent Section -->
+        <section>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 pb-2 border-b border-gray-200 dark:border-gray-700">Effluent Historical Data</h3>
+          
+          <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4">Parameter Charts</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <app-chart-card chartTitle="Effluent Flow (m³/hr)" [data]="data.effluent.flow.chartData" />
+            <app-chart-card chartTitle="Effluent TDS (ppm)" [data]="data.effluent.tds.chartData" />
+            <app-chart-card chartTitle="Effluent pH" [data]="data.effluent.ph.chartData" />
+          </div>
+
+          <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-12 mb-4">Analysis & Daily Summaries</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Flow Analysis & Summary -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">Flow Analysis</h5>
+              @if (effluentFlowTrend(); as trend) {
+                 <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Effluent_Flow_Daily_Summary" [data]="mapTableData(data.effluent.flow.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+
+            <!-- TDS Analysis & Summary -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">TDS Analysis</h5>
+              @if (effluentTdsTrend(); as trend) {
+                <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Effluent_TDS_Daily_Summary" [data]="mapTableData(data.effluent.tds.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+
+            <!-- pH Analysis & Summary -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-6 flex flex-col gap-6">
+              <h5 class="text-lg font-bold text-gray-900 dark:text-white">pH Analysis</h5>
+              @if (effluentPhTrend(); as trend) {
+                <div class="bg-white dark:bg-gray-900/50 rounded-lg p-4">
+                  <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Overall Trend</h4>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Avg</p><p class="font-bold text-gray-900 dark:text-white">{{ trend.overallAverage.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Trend</p>
+                      <div class="flex items-center gap-1 font-bold" [class]="getTrendColor(trend.trend)">
+                        @if (trend.trend === 'Increasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.03 9.77a.75.75 0 01-1.06-1.06l5.25-5.25a.75.75 0 011.06 0l5.25 5.25a.75.75 0 11-1.06 1.06L10.75 5.612V16.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg> }
+                        @else if (trend.trend === 'Decreasing') { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l4.22-4.158a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0l-5.25-5.25a.75.75 0 111.06-1.06L9.25 14.388V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg> }
+                        @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4.25 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H5a.75.75 0 01-.75-.75z" /></svg> }
+                        <span>{{ trend.trend }} {{ trend.percentageChangeDisplay }}</span>
+                      </div>
+                    </div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Min</p><p class="font-bold text-sky-400">{{ trend.overallMin.toFixed(2) }}</p></div>
+                    <div><p class="text-xs text-gray-500 dark:text-gray-400">Max</p><p class="font-bold text-red-400">{{ trend.overallMax.toFixed(2) }}</p></div>
+                  </div>
+                </div>
+              }
+              <app-parameter-table title="Daily Summary" exportTitle="Effluent_pH_Daily_Summary" [data]="mapTableData(data.effluent.ph.tableData)" [headers]="tableHeaders" [hasCardShell]="false" [exportable]="true" />
+            </div>
+          </div>
+        </section>
+      </div>
+    } @else {
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center shadow-lg">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">No Data Found</h3>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">There is no historical data available for the selected date range. Please try different dates.</p>
+        </div>
+    }
+  }
+
+</div>

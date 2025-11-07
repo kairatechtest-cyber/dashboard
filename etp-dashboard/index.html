@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ETP Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+  <style>
+    /* Custom scrollbar for light mode */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0; /* bg-slate-200 */
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8; /* bg-slate-400 */
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b; /* bg-slate-500 */
+    }
+
+    /* Custom scrollbar for a better look in dark mode */
+    .dark ::-webkit-scrollbar-track {
+      background: #1a202c; /* bg-gray-800 */
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #4a5568; /* bg-gray-600 */
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #718096; /* bg-gray-500 */
+    }
+
+    /* Keyframes for notification slide-in animation */
+    @keyframes slide-in-from-right {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    /* Class to apply the animation */
+    .animate-slide-in {
+      animation: slide-in-from-right 0.3s ease-out forwards;
+    }
+
+    /* Class for highlighting table rows from search */
+    .highlight-row {
+      background-color: rgba(16, 185, 129, 0.25) !important; /* semi-transparent emerald-500 */
+      transition: background-color 0.5s ease-in-out;
+      outline: 1px solid #10b981; /* emerald-500 */
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "rxjs": "https://aistudiocdn.com/rxjs@^7.8.2?conditions=es2015",
+    "rxjs/operators": "https://aistudiocdn.com/rxjs@^7.8.2/operators?conditions=es2015",
+    "rxjs/ajax": "https://aistudiocdn.com/rxjs@^7.8.2/ajax?conditions=es2015",
+    "rxjs/webSocket": "https://aistudiocdn.com/rxjs@^7.8.2/webSocket?conditions=es2015",
+    "rxjs/testing": "https://aistudiocdn.com/rxjs@^7.8.2/testing?conditions=es2015",
+    "rxjs/fetch": "https://aistudiocdn.com/rxjs@^7.8.2/fetch?conditions=es2015",
+    "@angular/compiler": "https://next.esm.sh/@angular/compiler@^20.3.9?external=rxjs",
+    "@angular/core": "https://next.esm.sh/@angular/core@^20.3.9?external=rxjs",
+    "@angular/platform-browser": "https://next.esm.sh/@angular/platform-browser@^20.3.9?external=rxjs",
+    "@angular/common": "https://next.esm.sh/@angular/common@^20.3.9?external=rxjs",
+    "@angular/common/http": "https://next.esm.sh/@angular/common@^20.3.9/http?external=rxjs",
+    "@angular/router": "https://next.esm.sh/@angular/router@^20.3.9?external=rxjs",
+    "@angular/forms": "https://next.esm.sh/@angular/forms@^20.3.9?external=rxjs",
+    "@google/genai": "https://next.esm.sh/@google/genai@^1.28.0?external=rxjs"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+  <app-root></app-root>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</body>
+</html>

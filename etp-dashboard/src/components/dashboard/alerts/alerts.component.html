@@ -1,0 +1,87 @@
+<div class="space-y-6">
+  <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-3">
+       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-emerald-400">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+      </svg>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">Alerts & Notifications</h2>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex items-center gap-4">
+       <!-- Refresh Rate Selector -->
+      <div class="flex items-center gap-2">
+        <label for="refreshRate" class="text-sm font-medium text-gray-500 dark:text-gray-400">Data Refresh:</label>
+        <select 
+          id="refreshRate" 
+          [value]="selectedRefreshRate()" 
+          (change)="onRefreshRateChange($event)"
+          class="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-md p-1.5 focus:ring-emerald-500 focus:border-emerald-500">
+          @for (option of refreshOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+      @if (notifications().length > 0) {
+        <button 
+          (click)="notificationService.clearAllNotifications()"
+          class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-1.5 px-3 rounded-md shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+          Clear All
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Alerts List -->
+  <div class="space-y-3">
+    @for (notification of notifications(); track trackById($index, notification)) {
+      <div 
+        class="w-full flex items-start p-4 rounded-lg shadow-md border"
+        [class]="getBgClass(notification.type)">
+        
+        <div class="flex-shrink-0 pt-0.5">
+          <!-- Icon based on type -->
+          @switch(notification.type) {
+            @case('success') {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+            @case('warning') {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            }
+            @case('error') {
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          }
+        </div>
+        
+        <div class="ml-3 w-0 flex-1">
+          <p class="text-sm font-medium text-gray-200">{{ notification.message }}</p>
+          <p class="text-xs text-gray-400 mt-1">{{ notification.timestamp | date:'short' }}</p>
+        </div>
+
+        <div class="ml-4 flex-shrink-0 flex">
+          <button (click)="notificationService.removeNotification(notification.id)" class="inline-flex text-gray-400 hover:text-white focus:outline-none">
+            <span class="sr-only">Close</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-lg p-8 text-center shadow-inner">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <h3 class="mt-2 text-lg font-semibold text-gray-900 dark:text-white">No New Alerts</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">All systems are stable. New alerts will appear here.</p>
+      </div>
+    }
+  </div>
+</div>

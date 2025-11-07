@@ -1,0 +1,121 @@
+<div class="space-y-8 max-w-4xl mx-auto">
+  <!-- Page Header -->
+  <div class="flex items-center gap-3">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-emerald-400">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-1.007 1.11-1.226l.554-.221m-.554 22.456l-5.413-2.165a1.125 1.125 0 01-.621-1.002v-5.052a1.125 1.125 0 01.621-1.002l5.413-2.165m0 0a1.125 1.125 0 011.125 0l5.413 2.165a1.125 1.125 0 01.621 1.002v5.052a1.125 1.125 0 01-.621 1.002l-5.413 2.165m-1.125 0h1.125c.621 0 1.125-.504 1.125-1.125V17.25c0-.621-.504-1.125-1.125-1.125h-1.125c-.621 0-1.125.504-1.125 1.125v3.375c0 .621.504 1.125 1.125 1.125z" />
+    </svg>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+      <button 
+        (click)="selectTab('profile')"
+        [class]="activeTab() === 'profile' ? 'border-emerald-500 text-emerald-500' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Profile
+      </button>
+      <button 
+        (click)="selectTab('application')"
+        [class]="activeTab() === 'application' ? 'border-emerald-500 text-emerald-500' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Application
+      </button>
+      <button 
+        (click)="selectTab('database')"
+        [class]="activeTab() === 'database' ? 'border-emerald-500 text-emerald-500' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Data Sources
+      </button>
+    </nav>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="pt-2">
+    @switch (activeTab()) {
+      @case ('profile') {
+        <app-profile></app-profile>
+      }
+      @case ('application') {
+        <div class="space-y-8">
+          <!-- Notification Settings -->
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Notification Preferences</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Choose which types of notifications you want to receive.</p>
+            
+            <div class="space-y-4">
+              <!-- Critical Alerts Toggle -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <label for="critical-alerts" class="font-medium text-gray-900 dark:text-gray-200">Critical & Error Alerts</label>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Receive alerts for out-of-range parameters and system errors.</p>
+                </div>
+                <label for="critical-alerts" class="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    id="critical-alerts" 
+                    class="sr-only peer"
+                    [checked]="settings().notifications.criticalEnabled"
+                    (change)="updateNotificationSetting($event, 'criticalEnabled')">
+                  <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                </label>
+              </div>
+
+              <!-- Success Notifications Toggle -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <label for="success-notifications" class="font-medium text-gray-900 dark:text-gray-200">Success Notifications</label>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Receive confirmations for successful actions (e.g., report downloads).</p>
+                </div>
+                <label for="success-notifications" class="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    id="success-notifications" 
+                    class="sr-only peer"
+                    [checked]="settings().notifications.successEnabled"
+                    (change)="updateNotificationSetting($event, 'successEnabled')">
+                  <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Refresh Rate Settings -->
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Data Refresh Rate</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Set how often the dashboard data should automatically refresh.</p>
+            
+            <fieldset>
+              <legend class="sr-only">Data refresh rate</legend>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                @for (option of refreshOptions; track option.value) {
+                  <div>
+                    <input 
+                      type="radio" 
+                      name="refresh-rate" 
+                      [value]="option.value" 
+                      [id]="'rate-' + option.value"
+                      [checked]="selectedRefreshRate() === option.value"
+                      (change)="updateRefreshRate($event)"
+                      class="hidden peer">
+                    <label 
+                      [for]="'rate-' + option.value"
+                      class="inline-flex items-center justify-center w-full p-3 text-gray-500 dark:text-gray-300 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer peer-checked:border-emerald-500 peer-checked:text-emerald-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <div class="block">
+                            <div class="w-full text-md font-semibold">{{ option.label }}</div>
+                        </div>
+                    </label>
+                  </div>
+                }
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      }
+      @case ('database') {
+        <app-database-settings></app-database-settings>
+      }
+    }
+  </div>
+</div>

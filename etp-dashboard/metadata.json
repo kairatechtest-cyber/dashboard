@@ -1,0 +1,5 @@
+{
+  "name": "ETP Dashboard",
+  "description": "A modern, responsive dashboard for monitoring an Effluent Treatment Plant (ETP), built with Angular and Tailwind CSS. It features user authentication and a detailed real-time data visualization interface.",
+  "requestFramePermissions": []
+}

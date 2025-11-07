@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-8 space-y-6">
+      <div class="flex flex-col items-center space-y-2">
+         <svg class="w-10 h-10 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+        </svg>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">CloudVision Access</h1>
+      </div>
+      <div class="text-center">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Create an Account</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Enter your details below to create your account.</p>
+      </div>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label for="name" class="text-sm font-medium text-gray-600 dark:text-gray-300">Name</label>
+          <div class="relative mt-1">
+            <input id="name" type="text" formControlName="name" class="w-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2.5 pl-10 pr-4 focus:ring-emerald-500 focus:border-emerald-500" placeholder="John Doe">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-400 dark:text-gray-400">
+                <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.095a1.23 1.23 0 00.41-1.412A9.99 9.99 0 0010 12.75a9.99 9.99 0 00-6.535 1.743z" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div>
+          <label for="email" class="text-sm font-medium text-gray-600 dark:text-gray-300">Email</label>
+           <div class="relative mt-1">
+            <input id="email" type="email" formControlName="email" class="w-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2.5 pl-10 pr-4 focus:ring-emerald-500 focus:border-emerald-500" placeholder="name@example.com">
+             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-400 dark:text-gray-400">
+                <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div>
+          <label for="phone" class="text-sm font-medium text-gray-600 dark:text-gray-300">Phone Number</label>
+           <div class="relative mt-1">
+            <input id="phone" type="tel" formControlName="phone" class="w-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2.5 pl-10 pr-4 focus:ring-emerald-500 focus:border-emerald-500" placeholder="(123) 456-7890">
+             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-400 dark:text-gray-400">
+                <path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.5A11.5 11.5 0 013.5 5V3.5z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div>
+          <label for="password" class="text-sm font-medium text-gray-600 dark:text-gray-300">Password</label>
+          <div class="relative mt-1">
+            <input id="password" type="password" formControlName="password" class="w-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2.5 pl-10 pr-4 focus:ring-emerald-500 focus:border-emerald-500" placeholder="••••••••">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-400 dark:text-gray-400">
+                <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div>
+          <label for="confirmPassword" class="text-sm font-medium text-gray-600 dark:text-gray-300">Confirm Password</label>
+          <div class="relative mt-1">
+            <input id="confirmPassword" type="password" formControlName="confirmPassword" class="w-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md p-2.5 pl-10 pr-4 focus:ring-emerald-500 focus:border-emerald-500" placeholder="••••••••">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-400 dark:text-gray-400">
+                <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </div>
+           @if (signupForm.errors?.['passwordsMismatch'] && signupForm.get('confirmPassword')?.touched) {
+            <p class="text-xs text-red-400 mt-1">Passwords do not match.</p>
+          }
+        </div>
+        
+        @if (signupError()) {
+          <p class="text-sm text-red-400 text-center">{{ signupError() }}</p>
+        }
+
+        <button type="submit" [disabled]="isFormLoading() || isGoogleLoading() || isMicrosoftLoading()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
+          @if (isFormLoading()) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Creating Account...</span>
+          } @else {
+            <span>Sign Up</span>
+          }
+        </button>
+      </form>
+
+      <div class="relative flex items-center">
+        <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+        <span class="flex-shrink mx-4 text-xs text-gray-500 dark:text-gray-400">OR CONTINUE WITH</span>
+        <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <button type="button" (click)="loginWithProvider('Google')" [disabled]="isFormLoading() || isGoogleLoading() || isMicrosoftLoading()" class="w-full flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white font-semibold py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed">
+          @if(isGoogleLoading()) {
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            <img src="https://www.google.com/favicon.ico" alt="Google icon" class="w-5 h-5">
+          }
+          Google
+        </button>
+        <button type="button" (click)="loginWithProvider('Microsoft')" [disabled]="isFormLoading() || isGoogleLoading() || isMicrosoftLoading()" class="w-full flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white font-semibold py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed">
+          @if(isMicrosoftLoading()) {
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          } @else {
+            <img src="https://www.microsoft.com/favicon.ico" alt="Microsoft icon" class="w-5 h-5">
+          }
+          Microsoft
+        </button>
+      </div>
+      
+      <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+        Already have an account? <a routerLink="/login" class="font-medium text-emerald-400 hover:underline">Log in</a>
+      </p>
+    </div>
+  </div>
+</div>

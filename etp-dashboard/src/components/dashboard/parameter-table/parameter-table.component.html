@@ -1,0 +1,62 @@
+<div 
+  [class.bg-white]="hasCardShell()" 
+  [class.dark:bg-gray-800]="hasCardShell()" 
+  [class.border]="hasCardShell()" 
+  [class.border-gray-200]="hasCardShell()" 
+  [class.dark:border-gray-700]="hasCardShell()" 
+  [class.rounded-lg]="hasCardShell()" 
+  [class.p-4]="hasCardShell()" 
+  [class.shadow-lg]="hasCardShell()" 
+  [class.h-full]="hasCardShell()">
+  <div class="flex items-center justify-between mb-3 px-2">
+    <h3 class="text-md font-bold text-gray-900 dark:text-white">{{ title() }}</h3>
+    @if (exportable()) {
+      <button (click)="exportToCsv()" title="Export data as CSV" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+          <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+        </svg>
+      </button>
+    }
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-600 dark:text-gray-300">
+      <thead class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/70">
+        <tr>
+          @for(header of headers(); track header) {
+            <th scope="col" class="px-3 py-2 font-normal">{{ header }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of data(); track item.name; let i = $index) {
+          <tr 
+            [class]="i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'"
+            [class.highlight-row]="item.name === highlightedRow()"
+            [attr.data-row-name]="item.name">
+            <td class="px-3 py-2 font-medium text-gray-800 dark:text-gray-300 whitespace-nowrap">{{ item.name }}</td>
+            @for(header of headers().slice(1); track header) {
+              @if (header === 'Status') {
+                <td class="px-3 py-2 font-medium text-gray-800 dark:text-gray-300 whitespace-nowrap">
+                  @if (item.rpm > 500) {
+                    <div class="flex items-center gap-2">
+                      <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                      <span>Running</span>
+                    </div>
+                  } @else {
+                    <div class="flex items-center gap-2">
+                      <div class="h-2.5 w-2.5 rounded-full bg-gray-500"></div>
+                      <span>Idle</span>
+                    </div>
+                  }
+                </td>
+              } @else {
+                <td class="px-3 py-2 font-semibold" [class]="getTdClass(header)">{{ getValue(item, header) }}</td>
+              }
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

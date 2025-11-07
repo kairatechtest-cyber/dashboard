@@ -1,0 +1,175 @@
+<!-- List View -->
+@if (viewMode() === 'list') {
+  <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Saved Database Connections</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your saved PostgreSQL connections.</p>
+      </div>
+      <button (click)="showAddForm()" class="flex-shrink-0 flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-md transition-colors text-sm shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        <span>Add Connection</span>
+      </button>
+    </div>
+    
+    <div class="mt-6 flow-root">
+      <ul role="list" class="-my-5 divide-y divide-gray-200 dark:divide-gray-700">
+        @for (connection of databaseService.connections(); track connection.id) {
+          <li class="py-5">
+            <div class="flex justify-between items-center space-x-3">
+              <div class="min-w-0 flex-1 flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 ring-2 ring-white dark:ring-gray-800">
+                    @if (connection.dbType === 'aws') {
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-2.43-2.43A3.75 3.75 0 0013.5 3c-1.282 0-2.45.602-3.22 1.555A4.502 4.502 0 002.25 9.75V15z" />
+                      </svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-gray-400">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m15.457 0a4.5 4.5 0 01-6.32 0M11.732 12h.541m-6.75 0h5.64m-1.789 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-3.375 0h.541m2.25 0h.541m-1.789 0h.283m3.375 0h.541m-1.789 0h.283" />
+                      </svg>
+                    }
+                  </span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-base font-semibold text-gray-900 dark:text-white">
+                    <a (click)="showEditForm(connection)" class="hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded">{{ connection.name }}</a>
+                  </p>
+                  <p class="truncate text-sm text-gray-500 dark:text-gray-400">{{ connection.host }}</p>
+                </div>
+              </div>
+              <div class="flex-shrink-0 self-center flex items-center space-x-2">
+                <button (click)="showEditForm(connection)" title="Edit" class="inline-flex items-center gap-x-1.5 rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
+                  Edit
+                </button>
+                <button (click)="confirmDelete(connection.id, connection.name)" title="Delete" class="p-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-500/10 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </li>
+        } @empty {
+          <div class="text-center text-gray-500 dark:text-gray-400 py-12 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg>
+            <p class="mt-4 font-semibold">No saved connections found.</p>
+            <p class="text-sm">Click "Add Connection" to get started.</p>
+          </div>
+        }
+      </ul>
+    </div>
+  </div>
+} @else {
+  <!-- Form View -->
+  <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-6">
+    <div class="flex justify-between items-start">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ editingConnection() ? 'Edit Connection' : 'Add New Connection' }}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Configure and test the connection to your PostgreSQL database.</p>
+      </div>
+      @let status = statusDisplay();
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" [class]="status.bgColor">
+        @if (status.icon === 'spinner') {
+          <svg class="animate-spin h-5 w-5" [class]="status.color" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5" [class]="status.color">
+            <path fill-rule="evenodd" [attr.d]="status.icon" clip-rule="evenodd" />
+          </svg>
+        }
+        <span class="text-sm font-medium" [class]="status.color">
+          Status: {{ status.text }}
+        </span>
+      </div>
+    </div>
+
+    <form [formGroup]="dbSettingsForm" (ngSubmit)="onSave()" class="mt-6 divide-y divide-gray-200 dark:divide-gray-700">
+      <input type="hidden" formControlName="id">
+
+      <!-- General Info Section -->
+      <div class="py-6 grid grid-cols-1 gap-y-4 sm:grid-cols-6 sm:gap-x-6">
+        <div class="sm:col-span-4">
+          <label for="name" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Connection Name</label>
+          <input type="text" id="name" formControlName="name" placeholder="e.g., Production DB" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+        </div>
+        <div class="sm:col-span-6">
+          <label class="block text-sm font-medium text-gray-600 dark:text-gray-300">Database Type</label>
+           <fieldset class="mt-2">
+            <legend class="sr-only">Database Type</legend>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <input type="radio" id="db-local" formControlName="dbType" value="local" class="sr-only peer">
+                <label for="db-local" class="flex items-center gap-4 rounded-md border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer peer-checked:border-emerald-500 peer-checked:ring-1 peer-checked:ring-emerald-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m15.457 0a4.5 4.5 0 01-6.32 0M11.732 12h.541m-6.75 0h5.64m-1.789 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-1.099 0h.283m-3.375 0h.541m2.25 0h.541m-1.789 0h.283m3.375 0h.541m-1.789 0h.283" /></svg>
+                  <span class="text-sm font-medium text-gray-900 dark:text-gray-200">Local PostgreSQL</span>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="db-aws" formControlName="dbType" value="aws" class="sr-only peer">
+                 <label for="db-aws" class="flex items-center gap-4 rounded-md border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer peer-checked:border-emerald-500 peer-checked:ring-1 peer-checked:ring-emerald-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-2.43-2.43A3.75 3.75 0 0013.5 3c-1.282 0-2.45.602-3.22 1.555A4.502 4.502 0 002.25 9.75V15z" /></svg>
+                  <span class="text-sm font-medium text-gray-900 dark:text-gray-200">AWS PostgreSQL</span>
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        @if (dbSettingsForm.get('dbType')?.value; as dbType) {
+          <div class="sm:col-span-6 p-3 text-sm text-sky-800 dark:text-sky-200 bg-sky-100 dark:bg-sky-900/30 border border-sky-200 dark:border-sky-700 rounded-md flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+            <span>The form is pre-filled with mock <strong>{{ dbType === 'aws' ? 'AWS' : 'Local' }}</strong> credentials for this demo. Click "Test Connection" to verify.</span>
+          </div>
+        }
+      </div>
+
+      <!-- Connection Details Section -->
+      <div class="pt-6 grid grid-cols-1 gap-y-4 sm:grid-cols-6 sm:gap-x-6">
+        <h3 class="sm:col-span-6 text-base font-semibold text-gray-900 dark:text-white">Connection Details</h3>
+        <div class="sm:col-span-4"><label for="host" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Host / Endpoint</label><input type="text" id="host" formControlName="host" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></div>
+        <div class="sm:col-span-2"><label for="port" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Port</label><input type="number" id="port" formControlName="port" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></div>
+        <div class="sm:col-span-3"><label for="database" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Database Name</label><input type="text" id="database" formControlName="database" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></div>
+      </div>
+      
+      <!-- Credentials Section -->
+      <div class="pt-6 grid grid-cols-1 gap-y-4 sm:grid-cols-6 sm:gap-x-6">
+        <h3 class="sm:col-span-6 text-base font-semibold text-gray-900 dark:text-white">Credentials</h3>
+        <div class="sm:col-span-3"><label for="user" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Username</label><input type="text" id="user" formControlName="user" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></div>
+        <div class="sm:col-span-3"><label for="password" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Password</label><input type="password" id="password" formControlName="password" class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 text-gray-900 dark:text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></div>
+      </div>
+
+      <!-- Test & Save Section -->
+      <div class="pt-6 space-y-4">
+        @if (connectionTestMessage()) {
+          <div class="p-3 text-sm rounded-md flex items-start gap-3" [class]="isConnectionVerified() ? 'text-green-800 dark:text-green-200 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-700' : 'text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-700'">
+            @if (isConnectionVerified()) { <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg> }
+            @else { <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg> }
+            <span>{{ connectionTestMessage() }}</span>
+          </div>
+        }
+        <div class="flex items-center justify-end gap-4">
+          <button type="button" (click)="cancelEdit()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-md shadow-sm">Cancel</button>
+          <button type="button" (click)="onTestConnection()" [disabled]="databaseService.status() === 'connecting'" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-md shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+            @if (databaseService.status() === 'connecting') {
+              <svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Testing...</span>
+            } @else {
+              <span>Test Connection</span>
+            }
+          </button>
+          <button type="submit" [disabled]="databaseService.status() === 'connecting' || !isConnectionVerified()" [title]="!isConnectionVerified() ? 'Please test connection successfully before saving' : 'Save connection details'"
+            class="px-6 py-2 text-sm font-medium text-white rounded-md shadow-sm transition-colors"
+            [class.bg-emerald-600]="isConnectionVerified()"
+            [class.hover:bg-emerald-700]="isConnectionVerified()"
+            [class.bg-gray-400]="!isConnectionVerified()"
+            [class.dark:bg-gray-600]="!isConnectionVerified()"
+            [class.cursor-not-allowed]="!isConnectionVerified()">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+}

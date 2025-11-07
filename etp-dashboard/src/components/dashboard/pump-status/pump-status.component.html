@@ -1,0 +1,25 @@
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-lg h-full">
+  <h3 class="text-md font-bold text-gray-900 dark:text-white mb-4">{{ title() }}</h3>
+  <div class="flex justify-around text-center gap-x-2">
+    <div>
+      <p class="text-3xl font-bold text-green-400">{{ data().conductivity }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Conductivity</p>
+    </div>
+    <div>
+      <p class="text-3xl font-bold text-red-500">{{ data().rpm }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">RPM</p>
+    </div>
+    <div>
+      <p class="text-3xl font-bold text-green-400">{{ data().current }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Current</p>
+    </div>
+    <div>
+      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ data().cumulativeFlow }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Cumulative Flow (m³)</p>
+    </div>
+    <div>
+      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ data().life }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Life (%)</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="fixed top-4 right-4 z-50 flex flex-col items-end gap-3 w-full max-w-sm">
+  @for (notification of notifications(); track notification.id) {
+    <div 
+      class="w-full flex items-start p-4 rounded-lg shadow-2xl border backdrop-blur-sm transition-all duration-300 animate-slide-in"
+      [class]="getBgClass(notification.type)">
+      
+      <div class="flex-shrink-0">
+        <!-- Icon based on type -->
+        @switch(notification.type) {
+          @case('success') {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          }
+          @case('warning') {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          }
+          @case('error') {
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" [class]="getIconClass(notification.type)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          }
+        }
+      </div>
+      
+      <div class="ml-3 w-0 flex-1 pt-0.5">
+        <p class="text-sm font-medium text-gray-200">{{ notification.message }}</p>
+      </div>
+
+      <div class="ml-4 flex-shrink-0 flex">
+        <button (click)="notificationService.removeNotification(notification.id)" class="inline-flex text-gray-400 hover:text-white focus:outline-none">
+          <span class="sr-only">Close</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  }
+  @if (notifications().length > 1) {
+    <button 
+      (click)="notificationService.clearAllNotifications()"
+      class="w-full text-center py-2 px-4 bg-gray-700/80 hover:bg-gray-600/80 border border-gray-600 text-gray-300 text-xs font-semibold rounded-lg shadow-lg backdrop-blur-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500">
+      Clear All Notifications
+    </button>
+  }
+</div>

@@ -1,0 +1,82 @@
+<div 
+  [class.bg-white]="hasCardShell()" 
+  [class.dark:bg-gray-800]="hasCardShell()" 
+  [class.border]="hasCardShell()" 
+  [class.border-gray-200]="hasCardShell()" 
+  [class.dark:border-gray-700]="hasCardShell()" 
+  [class.rounded-lg]="hasCardShell()" 
+  [class.p-4]="hasCardShell()" 
+  [class.shadow-lg]="hasCardShell()" 
+  [class.h-full]="hasCardShell()"
+  [class.flex]="hasCardShell()"
+  [class.flex-col]="hasCardShell()">
+  <div class="flex-grow flex flex-col justify-center items-center h-64 min-h-full">
+    <div class="flex items-center justify-between w-full px-2 mb-1">
+      <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold">{{ chartTitle() }}</p>
+      <div class="text-center h-6 flex items-center">
+        @if (isZoomed()) {
+          <button (click)="resetView()" class="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Reset Zoom</button>
+        } @else if (data().length > 1) {
+          <p class="text-xs text-gray-500 dark:text-gray-400">Drag to select, scroll to zoom</p>
+        }
+      </div>
+    </div>
+    <div class="w-full h-full flex items-center justify-center relative touch-none"
+         [class.cursor-grab]="isZoomed() && !isPanning()"
+         [class.cursor-grabbing]="isPanning()"
+         [class.cursor-crosshair]="!isZoomed()"
+         (wheel)="onWheel($event)"
+         (mousedown)="onMouseDown($event)"
+         (mousemove)="onMouseMove($event)"
+         (mouseup)="onMouseUpOrLeave($event)"
+         (mouseleave)="onMouseUpOrLeave($event)">
+      <!-- Tooltip -->
+      @if (tooltip().visible) {
+        <div 
+          class="absolute bg-gray-800 dark:bg-gray-900 border border-gray-600 text-white text-xs rounded py-1 px-2 pointer-events-none z-10 -translate-x-1/2 -translate-y-full transition-opacity duration-200"
+          [style.left.px]="tooltip().x"
+          [style.top.px]="tooltip().y - 8">
+          {{ tooltip().content }}
+          <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-gray-600"></div>
+        </div>
+      }
+      
+      <!-- Selection Box -->
+      @if (selectionBox().visible) {
+        <div
+          class="absolute top-0 h-full bg-emerald-500/20 border-x border-emerald-400 pointer-events-none z-5"
+          [style.left.px]="selectionBox().x"
+          [style.width.px]="selectionBox().width">
+        </div>
+      }
+      
+      <div class="w-full h-full flex items-end p-4 relative">
+        <svg width="100%" height="100%" [attr.viewBox]="'0 0 ' + viewBoxWidth + ' ' + viewBoxHeight" preserveAspectRatio="none" class="text-cyan-500 dark:text-cyan-400 overflow-visible">
+            <path [attr.d]="pathData()" stroke="currentColor" stroke-width="0.5" fill="none"/>
+            @for (point of visibleData(); track $index) {
+              <circle 
+                [attr.cx]="xScale()($index)" 
+                [attr.cy]="yScale()(point.value)" 
+                r="1.5" 
+                fill="currentColor"
+                class="cursor-pointer transition-all duration-200 hover:r-[3px] hover:opacity-100 opacity-70"
+                (mouseenter)="showTooltip($event, point)"
+                (mouseleave)="hideTooltip()"
+              />
+            }
+        </svg>
+      </div>
+    </div>
+     @if(visibleData().length > 1) {
+      <div class="w-full flex justify-between text-xs text-gray-500 dark:text-gray-400 px-4 mt-1">
+        <span>{{ startTimeLabel() }}</span>
+        <span>{{ middleTimeLabel() }}</span>
+        <span>{{ endTimeLabel() }}</span>
+      </div>
+    } @else {
+      <div class="w-full flex justify-center text-xs text-gray-500 dark:text-gray-400 px-4 mt-1">
+        <span>No data available</span>
+      </div>
+    }
+  </div>
+</div>

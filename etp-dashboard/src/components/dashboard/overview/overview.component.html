@@ -1,0 +1,134 @@
+@if (!isInitialLoading()) {
+  <div class="space-y-6">
+    <!-- KPI Header Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      @for (kpi of kpiData(); track kpi.title) {
+        <app-kpi-card [title]="kpi.title" [value]="kpi.value" [unit]="kpi.unit" [icon]="kpi.icon" />
+      }
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Left Main Column (Charts) -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <div class="flex flex-col gap-4">
+          <h3 class="text-lg font-bold text-white ml-2">Inflow Hr/Day wise</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <app-chart-card class="md:col-span-1" chartTitle="Daily Flow(avg)" yAxisLabel="Flow (m³/hr)" [data]="dailyFlowData()" />
+            <app-chart-card class="md:col-span-1" chartTitle="Daily TDS (avg.)" yAxisLabel="TDS (ppm)" [data]="dailyTdsData()" />
+            <app-chart-card class="md:col-span-1" chartTitle="Daily pH (avg)" yAxisLabel="pH" [data]="phData()" />
+          </div>
+        </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-lg font-bold text-white ml-2">Effluent Hr/Day wise</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <app-chart-card class="md:col-span-1" chartTitle="Flow" yAxisLabel="Flow (m³/hr)" [data]="dailyFlowData()" />
+              <app-chart-card class="md:col-span-1" chartTitle="TDS" yAxisLabel="TDS (ppm)" [data]="tdsData()" />
+              <app-chart-card class="md:col-span-1" chartTitle="pH" yAxisLabel="pH" [data]="phData()" />
+            </div>
+        </div>
+      </div>
+      
+      <!-- Right Sidebar Column -->
+      <div class="lg:col-span-1 flex flex-col gap-6">
+        <app-sub-kpi-card [title]="influentSubKpis().title" [metrics]="influentSubKpis().metrics" />
+        <app-parameter-table title="Influent Parameters" [data]="influentParams()" [exportable]="true" />
+        <app-sub-kpi-card [title]="effluentSubKpis().title" [metrics]="effluentSubKpis().metrics" />
+        <app-parameter-table title="Effluent Parameters" [data]="effluentParams()" [exportable]="true" />
+      </div>
+
+    </div>
+
+    <!-- Bottom Pumps & Parameters Section -->
+    <div class="mt-6">
+      <h2 class="text-xl font-bold text-white mb-4">Pump & Dosing Status</h2>
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+        <!-- Left Column (Tables) -->
+        <div class="xl:col-span-1 flex flex-col gap-6">
+          <app-parameter-table title="Pump Status" [data]="pumpStatus()" [headers]="pumpStatusHeaders" [exportable]="true" />
+          <app-parameter-table title="Acid Dosing" [data]="acidDosingParams()" valueColumnName="value" [exportable]="true" />
+        </div>
+        
+        <!-- Right Column (Pump Cards) -->
+        <div class="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex flex-col gap-6">
+            <app-pump-status title="Pump A 1st Stage RO-1" [data]="pumpStage1A()" />
+            <app-pump-status title="Pump B 1st Stage RO-2" [data]="pumpStage1B()" />
+            <app-pump-status title="Pump C 1st Stage RO-3" [data]="pumpStage1C()" />
+          </div>
+          <div class="flex flex-col gap-6">
+            <app-pump-status title="Pump A 2nd Stage RO-1" [data]="pumpStage2A()" />
+            <app-pump-status title="Pump B 2nd Stage RO-2" [data]="pumpStage2B()" />
+            <app-pump-status title="Pump C 2nd Stage RO-3" [data]="pumpStage2C()" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <!-- Skeleton Loader -->
+  <div class="animate-pulse space-y-6">
+    <!-- KPI Skeleton -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      @for (_ of [1,2,3,4,5,6,7]; track _) {
+        <div class="h-20 bg-gray-700 rounded-lg"></div>
+      }
+    </div>
+
+    <!-- Main Content Skeleton -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left Column Skeleton -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <div>
+          <div class="h-6 bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+          </div>
+        </div>
+        <div>
+          <div class="h-6 bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+            <div class="h-48 bg-gray-700 rounded-lg"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column Skeleton -->
+      <div class="lg:col-span-1 flex flex-col gap-6">
+        <div class="h-48 bg-gray-700 rounded-lg"></div> <!-- Influent Sub-KPIs -->
+        <div class="h-48 bg-gray-700 rounded-lg"></div> <!-- Influent Params Table -->
+        <div class="h-48 bg-gray-700 rounded-lg"></div> <!-- Effluent Sub-KPIs -->
+        <div class="h-64 bg-gray-700 rounded-lg"></div> <!-- Effluent Params Table -->
+      </div>
+    </div>
+
+    <!-- Bottom Section Skeleton -->
+    <div>
+      <div class="h-8 bg-gray-700 rounded w-1/4 mb-4"></div> <!-- Title -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-1 flex flex-col gap-6">
+          <div class="h-64 bg-gray-700 rounded-lg"></div> <!-- Pump Table -->
+          <div class="h-64 bg-gray-700 rounded-lg"></div> <!-- Acid Dosing Table -->
+        </div>
+        <div class="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex flex-col gap-6">
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+          </div>
+          <div class="flex flex-col gap-6">
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+            <div class="h-24 bg-gray-700 rounded-lg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
